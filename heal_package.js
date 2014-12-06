@@ -4,25 +4,14 @@ module.exports = {
 
     /* healing creep */
     healer: function(creep) {
-        // heal the hurt creep who is closest to the base
-        var closest_spawn = creep.pos.findNearest(Game.MY_SPAWNS);
-        var needy_creep;
-        var home_dist_to_needy_creep = 987654321;
-        if (closest_spawn) {
-            for (var i in Game.creeps) {
-                var candidate_creep = Game.creeps[i];
-                if (candidate_creep.hits < candidate_creep.hitsMax) {
-                    var home_dist_to_candidate_creep = closest_spawn.pos.findPathTo(candidate_creep).length;
-                    if (home_dist_to_candidate_creep < home_dist_to_needy_creep) {
-                        needy_creep = candidate_creep;
-                        home_dist_to_needy_creep = home_dist_to_candidate_creep;
-                    }
-                }
+        var closest_needy_creep = creep.pos.findNearest(Game.MY_CREEPS, {
+            filter: function(patient_candidate_creep) {
+                return patient_candidate_creep.hits < patient_candidate_creep.hitsMax;
             }
-        }
-        if (home_dist_to_needy_creep < 987654321) {
-            creep.moveTo(needy_creep);
-            creep.heal(needy_creep);
+        });
+        if (closest_needy_creep) {
+            creep.moveTo(closest_needy_creep);
+            creep.heal(closest_needy_creep);
         } else {
             // if no creeps are hurt, move to a fighting creep, or rally
             var closest_fighting_creep = creep.pos.findNearest(Game.MY_CREEPS, {

@@ -12,8 +12,8 @@ module.exports = {
             }
         } else {
             var closest_spawn = creep.pos.findNearest(Game.MY_SPAWNS, {
-                filter: function(deliver_candidate_spawn) {
-                    return deliver_candidate_spawn.energy < deliver_candidate_spawn.energyCapacity;
+                filter: function(delivery_candidate_spawn) {
+                    return delivery_candidate_spawn.energy < delivery_candidate_spawn.energyCapacity;
                 }
             });
             if (closest_spawn) {
